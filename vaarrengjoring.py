@@ -3,20 +3,22 @@ import streamlit as st
 import plotly.express as px
 from datetime import datetime
 
+#Cache function
 @st.cache_data
 def load_data(file):
     df = pd.read_csv(file)  
     return df
 
 st.title("Oslo Vårrengjøring 2023")
+
+#Load data
 df = load_data('vaarengjoring.csv')
 
-
-# Create the date range dropboxes
+# Find max and min date for date filter
 min_date = pd.to_datetime(df['Dato'], format='%d.%m.%Y').min()
 max_date = pd.to_datetime(df['Dato'], format='%d.%m.%Y').max()
-print(min_date, max_date)
 
+# Filter the data based on the date range
 filter_street = st.sidebar.checkbox('Filtrer på addresse:')
 
 if filter_street:
@@ -26,8 +28,7 @@ if filter_street:
     else:
         df = df
 
-
-# Filter the data based on the date range
+# Filter the data based on the date
 filter_date = st.sidebar.checkbox('Filtrer på dato: ')
 
 if filter_date:
@@ -36,15 +37,11 @@ if filter_date:
 else:
     df = df
 
-
-
-
-
-
 # Update the map with the filtered data
 fig1 = px.scatter_mapbox(df, lat='lat', lon='lon', hover_name='Gatenavn', hover_data =["Kommentar", "Tidpunkt"], zoom=10, color_discrete_sequence=["fuchsia"])
 fig1.update_layout(mapbox_style="open-street-map")
 fig1.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+
 # Display the updated map in Streamlit
 st.plotly_chart(fig1)
 st.write(df.iloc[:,0:4])
