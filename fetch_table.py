@@ -17,10 +17,10 @@ min_date = pd.to_datetime(df['Dato'], format='%d.%m.%Y').min()
 max_date = pd.to_datetime(df['Dato'], format='%d.%m.%Y').max()
 print(min_date, max_date)
 
-filter_street = st.sidebar.checkbox('Filter on street:')
+filter_street = st.sidebar.checkbox('Filtrer på addresse:')
 
 if filter_street:
-    search_term = st.sidebar.text_input('Search Address')
+    search_term = st.sidebar.text_input('Addresse: ')
     if search_term:
         df = df.loc[df['Gatenavn'].str.contains(search_term, case=False)]
     else:
@@ -28,10 +28,10 @@ if filter_street:
 
 
 # Filter the data based on the date range
-filter_date = st.sidebar.checkbox('Filter on date:')
+filter_date = st.sidebar.checkbox('Filtrer på dato: ')
 
 if filter_date:
-    date_range = st.sidebar.date_input('Date:', max_date, min_value=min_date, max_value=max_date)
+    date_range = st.sidebar.date_input('Dato:', max_date, min_value=min_date, max_value=max_date)
     df = df[(pd.to_datetime(df['Dato'], format='%d.%m.%Y').dt.date == date_range)]
 else:
     df = df
